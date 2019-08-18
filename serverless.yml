@@ -1,0 +1,24 @@
+service: spruce
+
+provider:
+  name: aws
+  region: eu-central-1
+  runtime: python3.7
+  stage: ${opt:stage, 'dev'}
+  environment:
+    AIRTABLE_API_TOKEN: ${env:AIRTABLE_API_TOKEN}
+    AIRTABLE_PLANTS_BASE_ID: ${env:AIRTABLE_PLANTS_BASE_ID}
+
+functions:
+  check_water_status:
+    description: Check water status of all plants.
+    handler: handler.check_water_status
+    events:
+      - http: GET check/water
+
+
+package:
+  exclude:
+    - ./**
+  include:
+    - handler.py
